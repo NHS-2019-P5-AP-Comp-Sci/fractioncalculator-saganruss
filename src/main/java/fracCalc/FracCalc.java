@@ -32,11 +32,10 @@ public class FracCalc {
 	public static String produceAnswer(String input) {
 		int spaceIndex = input.indexOf(' ');
 		String firstOperand = input.substring(0, spaceIndex);
-		//operandSeg(firstOperand);
 		String operator = input.substring(input.indexOf(" ") + 1, spaceIndex + 2);
 		String secondOperand = input.substring(spaceIndex + 3);
-		return secondOperand;
-
+		return operandSeg(secondOperand);
+	}
 		/*
 		String one = operandSeg(firstOperand);
 		int oneNum = intConvert(one.substring(0, one.indexOf('/')));
@@ -74,6 +73,7 @@ public class FracCalc {
 		}
 		
 	}
+	*/
 
 	public static String operandSeg(String operand) {
 		String whole;
@@ -99,6 +99,8 @@ public class FracCalc {
 			numerator = "0";
 			denominator = "1";
 		}
+		return ("whole:" + whole + " numerator:" + numerator + " denominator:" + denominator);
+		/*
 		// mixed number converter
 		String newNumerator = intConvert(denominator) * intConvert(whole) + intConvert(numerator) + "";
 		if (operand.substring(0,1).equals("-")) {
@@ -109,8 +111,7 @@ public class FracCalc {
 			String sign = "";
 			return sign + newNumerator + "/" + denominator;
 		}
-		// return ("whole:" + whole + " numerator:" + numerator + " denominator:" +
-		// denominator);
+		*/
 	}
 
 	public static int intConvert(String num) {
@@ -140,4 +141,3 @@ public class FracCalc {
 	}
 	*/
 	}
-}
