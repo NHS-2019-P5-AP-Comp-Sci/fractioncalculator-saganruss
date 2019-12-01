@@ -34,36 +34,31 @@ public class FracCalc {
 		String firstOperand = input.substring(0, spaceIndex);
 		String operator = input.substring(input.indexOf(" ") + 1, spaceIndex + 2);
 		String secondOperand = input.substring(spaceIndex + 3);
-		return operandSeg(secondOperand);
-	}
-		/*
+		
 		String one = operandSeg(firstOperand);
-		int oneNum = intConvert(one.substring(0, one.indexOf('/')));
-		int oneDen = intConvert(one.substring(one.indexOf('/') + 1));
+		int oneNum = Integer.parseInt(one.substring(0, one.indexOf('/')));
+		int oneDen = Integer.parseInt(one.substring(one.indexOf('/') + 1));
 		String two = operandSeg(secondOperand);
-		int twoNum = intConvert(two.substring(0, two.indexOf('/')));
-		int twoDen = intConvert(two.substring(two.indexOf('/') + 1));
-
+		int twoNum = Integer.parseInt(two.substring(0, two.indexOf('/')));
+		int twoDen = Integer.parseInt(two.substring(two.indexOf('/') + 1));
+		
 		if (operator.equals("+")) {
 			String numerator = (oneNum * twoDen) + (twoNum * oneDen) + "";
 			String denominator = oneDen * twoDen + "";
 			String result = numerator + "/" + denominator;
-			return oneNum+"";
+			return result;
 
-		}
-		if (operator.equals("-")) {
+		} else if (operator.equals("-")) {
 			String numerator = (oneNum * twoDen) - (twoNum * oneDen) + "";
 			String denominator = oneDen * twoDen + "";
 			String result = numerator + "/" + denominator;
 			return result;
-		}
-		if (operator.equals("/")) {
+		} else if (operator.equals("/")) {
 			String numerator = oneNum * twoDen + "";
 			String denominator = oneDen * twoNum + "";
 			String result = numerator + "/" + denominator;
 			return result;
-		}
-		if (operator.equals("*")) {
+		} else if (operator.equals("*")) {
 			String numerator = oneNum * twoNum + "";
 			String denominator = oneDen * twoDen + "";
 			String result = numerator + "/" + denominator;
@@ -73,7 +68,7 @@ public class FracCalc {
 		}
 		
 	}
-	*/
+	
 
 	public static String operandSeg(String operand) {
 		String whole;
@@ -99,31 +94,29 @@ public class FracCalc {
 			numerator = "0";
 			denominator = "1";
 		}
-		return ("whole:" + whole + " numerator:" + numerator + " denominator:" + denominator);
-		/*
+		
 		// mixed number converter
-		String newNumerator = intConvert(denominator) * intConvert(whole) + intConvert(numerator) + "";
-		if (operand.substring(0,1).equals("-")) {
-			String sign = "-";
-			return sign + newNumerator + "/" + denominator;
+		if (whole.length()>0) {
+			if (whole.substring(0,1).equals("-")) {
+				numerator = "-"+(Integer.parseInt(denominator) * Integer.parseInt(whole.substring(1)) + Integer.parseInt(numerator));
+			} else if (!whole.substring(0,1).equals("-")) {
+				numerator = Integer.parseInt(denominator) * Integer.parseInt(whole) + Integer.parseInt(numerator) + "";
+			}
 		}
-		else {
-			String sign = "";
-			return sign + newNumerator + "/" + denominator;
-		}
-		*/
+		return numerator + "/" + denominator;
 	}
+}
 
-	public static int intConvert(String num) {
-		for (int i = 0; i < 100; i++) {
+	/*public static int integer(String num) {
+		for (int i = Integer.MIN_VALUE; i < Integer.MAX_VALUE; i++) {
 			if (num.equals(i + "")) {
 				return i;
 			}
 		}
 		return 0;
 	}
-
-	/*public static String reducer(String input) {
+}
+	public static String reducer(String input) {
 		int numerator = intConvert(input.substring(0, input.indexOf("/")));
 		int denominator = intConvert(input.substring(input.indexOf("/") + 1));
 		if (denominator % numerator != 0) {
@@ -140,4 +133,5 @@ public class FracCalc {
 		return "didn't work";
 	}
 	*/
-	}
+	
+
