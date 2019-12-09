@@ -7,19 +7,9 @@ package fracCalc;
 import java.util.*;
 
 public class FracCalc {
-	// ** IMPORTANT ** DO NOT DELETE THIS FUNCTION. This function will be used to
-	// test your code
-	// This function takes a String 'input' and produces the result
-	//
-	// input is a fraction string that needs to be evaluated. For your program, this
-	// will be the user input.
-	// e.g. input ==> "1/2 + 3/4"
-	//
-	// The function should return the result of the fraction after it has been
-	// calculated
-	// e.g. return ==> "1_1/4"
 
 	public static void main(String[] args) {
+		// produceAnswer method is applied to user input until "quit"
 		Scanner userInput = new Scanner(System.in);
 		String equation = userInput.nextLine();
 		while (!equation.equals("quit")) {
@@ -30,45 +20,57 @@ public class FracCalc {
 	}
 
 	public static String produceAnswer(String input) {
+		// input segmentation into operands and operator
 		int spaceIndex = input.indexOf(' ');
 		String firstOperand = input.substring(0, spaceIndex);
 		String operator = input.substring(input.indexOf(" ") + 1, spaceIndex + 2);
 		String secondOperand = input.substring(spaceIndex + 3);
-		
+
+		// operand segmentation into numerator and denominator
 		String one = operandSeg(firstOperand);
 		int oneNum = Integer.parseInt(one.substring(0, one.indexOf('/')));
 		int oneDen = Integer.parseInt(one.substring(one.indexOf('/') + 1));
 		String two = operandSeg(secondOperand);
 		int twoNum = Integer.parseInt(two.substring(0, two.indexOf('/')));
 		int twoDen = Integer.parseInt(two.substring(two.indexOf('/') + 1));
-		
+
+		// addition
 		if (operator.equals("+")) {
 			String numerator = (oneNum * twoDen) + (twoNum * oneDen) + "";
 			String denominator = oneDen * twoDen + "";
 			String result = numerator + "/" + denominator;
-			return result;
+			return reducer(result);
 
+			// subtraction
 		} else if (operator.equals("-")) {
 			String numerator = (oneNum * twoDen) - (twoNum * oneDen) + "";
 			String denominator = oneDen * twoDen + "";
 			String result = numerator + "/" + denominator;
-			return result;
+			return reducer(result);
+
+			// division
 		} else if (operator.equals("/")) {
+			if (oneNum == 0 || oneDen == 0 || twoNum == 0 || twoDen == 0)
+				return "0";
 			String numerator = oneNum * twoDen + "";
 			String denominator = oneDen * twoNum + "";
 			String result = numerator + "/" + denominator;
-			return result;
+			return reducer(result);
+
+			// multiplication
 		} else if (operator.equals("*")) {
+			if (oneNum == 0 || oneDen == 0 || twoNum == 0 || twoDen == 0)
+				return "0";
 			String numerator = oneNum * twoNum + "";
 			String denominator = oneDen * twoDen + "";
 			String result = numerator + "/" + denominator;
-			return result;
+			return reducer(result);
+
 		} else {
-			return "Input is in an invalid format.";
+			return "ERROR: Input is in an invalid format.";
 		}
-		
+
 	}
-	
 
 	public static String operandSeg(String operand) {
 		String whole;
@@ -94,44 +96,65 @@ public class FracCalc {
 			numerator = "0";
 			denominator = "1";
 		}
-		
+
 		// mixed number converter
-		if (whole.length()>0) {
-			if (whole.substring(0,1).equals("-")) {
-				numerator = "-"+(Integer.parseInt(denominator) * Integer.parseInt(whole.substring(1)) + Integer.parseInt(numerator));
-			} else if (!whole.substring(0,1).equals("-")) {
+		if (whole.length() > 0) {
+			if (whole.substring(0, 1).equals("-")) {
+				numerator = "-" + (Integer.parseInt(denominator) * Integer.parseInt(whole.substring(1))
+						+ Integer.parseInt(numerator));
+			} else if (!whole.substring(0, 1).equals("-")) {
 				numerator = Integer.parseInt(denominator) * Integer.parseInt(whole) + Integer.parseInt(numerator) + "";
 			}
 		}
 		return numerator + "/" + denominator;
 	}
-}
 
-	/*public static int integer(String num) {
-		for (int i = Integer.MIN_VALUE; i < Integer.MAX_VALUE; i++) {
-			if (num.equals(i + "")) {
-				return i;
-			}
-		}
-		return 0;
-	}
-}
 	public static String reducer(String input) {
-		int numerator = intConvert(input.substring(0, input.indexOf("/")));
-		int denominator = intConvert(input.substring(input.indexOf("/") + 1));
-		if (denominator % numerator != 0) {
-			for (int i = 2; i <= denominator; i++) {
-				if ((numerator % i == 0) && (denominator % i == 0)) {
-					int commonDen = i;
-					String newNumerator = numerator / commonDen + "";
-					String newDenominator = denominator / commonDen + "";
-					// return newNumerator + "/" + newDenominator;
-					return commonDen + "";
-				}
+		// output segmentation into numerator, denominator and whole number
+		int numerator = Integer.parseInt(input.substring(0, input.indexOf("/")));
+		int denominator = Integer.parseInt(input.substring(input.indexOf("/") + 1));
+		int whole = numerator / denominator;
+
+		// adjusts position of negative sign
+		if ((numerator < 0 && denominator < 0) || (numerator > 0 && denominator < 0)) {
+			numerator /= -1;
+			denominator /= -1;
+		}
+
+		// simplifies outputs equal to 0
+		if (numerator == 0 || denominator == 0)
+			return "0";
+
+		// finds and divides by common denominator
+		for (int i = Math.abs(denominator); i > 0; i--) {
+			if ((numerator % i == 0) && (denominator % i == 0)) {
+				numerator = numerator / i;
+				denominator = denominator / i;
 			}
 		}
-		return "didn't work";
-	}
-	*/
-	
 
+		// simplifies fractions over 1
+		if (denominator == 1) {
+			return numerator + "";
+
+			// simplifies fractions equal to a whole number
+		} else if (numerator % denominator == 0 && denominator != 0) {
+			return (numerator / denominator) + "";
+		}
+
+		// outputs simplified fractions and mixed numbers
+		else {
+			numerator = numerator - (whole * denominator);
+			if (whole == 0) {
+				return numerator + "/" + denominator;
+			} else {
+				if (whole < 0 && denominator < 0)
+					denominator /= -1;
+				else if (whole < 0 && numerator < 0)
+					numerator /= -1;
+				return "" + whole + "_" + numerator + "/" + denominator;
+			}
+		}
+
+	}
+}
